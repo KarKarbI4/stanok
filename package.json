@@ -1,7 +1,9 @@
 {
   "name": "stanok",
-  "version": "0.2.0",
-  "workspaces": ["packages/*"],
+  "version": "0.3.0",
+  "workspaces": [
+    "packages/*"
+  ],
   "description": "CLI for managing parallel git worktree-based development environments",
   "type": "module",
   "bin": {
@@ -76,7 +78,9 @@
       "default": "./dist/plugin-portless/index.js"
     }
   },
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "build": "tsc --project tsconfig.build.json && tsc-alias --project tsconfig.build.json && chmod +x dist/cli/stanok.js",
     "clean": "rm -rf dist",
@@ -88,7 +92,14 @@
     "version": "bunx changeset version",
     "release": "bun run clean && bun run build && npm publish"
   },
-  "keywords": ["git", "worktree", "cli", "dev-environment", "jira", "bitbucket"],
+  "keywords": [
+    "git",
+    "worktree",
+    "cli",
+    "dev-environment",
+    "jira",
+    "bitbucket"
+  ],
   "author": "KarKarbI4",
   "license": "MIT",
   "repository": {
