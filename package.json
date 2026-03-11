@@ -86,7 +86,7 @@
     "build:raycast": "cd packages/raycast && npx ray build",
     "changeset": "bunx changeset",
     "version": "bunx changeset version",
-    "release": "bun run clean && bun run build && bunx changeset publish"
+    "release": "bun run clean && bun run build && npm publish"
   },
   "keywords": ["git", "worktree", "cli", "dev-environment", "jira", "bitbucket"],
   "author": "KarKarbI4",

@@ -41,23 +41,73 @@ jobs:
       - name: Version bump
         if: steps.check.outputs.has_changesets == 'true'
         run: |
-          bun run version
+          # Determine bump type from changeset files
+          BUMP="patch"
+          for f in .changeset/*.md; do
+            [ "$(basename "$f")" = "README.md" ] && continue
+            if grep -q "major" "$f"; then BUMP="major"; break; fi
+            if grep -q "minor" "$f"; then BUMP="minor"; fi
+          done
+
+          # Bump version in package.json
+          npm version "$BUMP" --no-git-tag-version
+
+          VERSION=$(node -p "require('./package.json').version")
+          DATE=$(date +%Y-%m-%d)
+
+          # Collect changelog entries
+          ENTRIES=""
+          for f in .changeset/*.md; do
+            [ "$(basename "$f")" = "README.md" ] && continue
+            ENTRIES="$ENTRIES$(awk '/^---$/{c++;next} c==2' "$f" | sed '/^$/d')\n"
+          done
+
+          # Prepend to CHANGELOG.md
+          {
+            echo "# stanok"
+            echo ""
+            echo "## $VERSION — $DATE"
+            echo ""
+            echo -e "$ENTRIES"
+            if [ -f CHANGELOG.md ]; then
+              # Skip old "# stanok" header if present
+              tail -n +2 CHANGELOG.md
+            fi
+          } > CHANGELOG.new.md
+          mv CHANGELOG.new.md CHANGELOG.md
+
+          # Remove consumed changeset files (keep README.md)
+          for f in .changeset/*.md; do
+            [ "$(basename "$f")" = "README.md" ] && continue
+            rm "$f"
+          done
+
+          # Commit and tag
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "chore: release" || true
-          git push
+          git commit -m "chore: release stanok@$VERSION"
+          git tag "v$VERSION"
+          git push && git push --tags
 
       - name: Publish to npm
         if: steps.check.outputs.has_changesets == 'true'
-        run: bun run release
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+          bun run release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish unpublished versions
+      - name: Publish unpublished version
         if: steps.check.outputs.has_changesets == 'false'
         run: |
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-          bunx changeset publish
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "stanok@$VERSION" version 2>/dev/null; then
+            echo "stanok@$VERSION already published, skipping"
+          else
+            echo "stanok@$VERSION not on npm, publishing..."
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+            bun run release
+          fi
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
