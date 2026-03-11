@@ -3,6 +3,8 @@
 > CLI for managing parallel git worktree-based development environments
 
 [![npm](https://img.shields.io/npm/v/@stanok/cli)](https://www.npmjs.com/package/@stanok/cli)
+[![CI](https://github.com/KarKarbI4/stanok/actions/workflows/ci.yml/badge.svg)](https://github.com/KarKarbI4/stanok/actions/workflows/ci.yml)
+[![tests](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/KarKarbI4/cf2b3c9663b43986fc6f989989b835a9/raw/stanok-tests.json)](https://github.com/KarKarbI4/stanok/actions/workflows/ci.yml)
 [![license](https://img.shields.io/npm/l/@stanok/cli)](LICENSE)
 [![bun](https://img.shields.io/badge/runtime-bun%20%3E%3D%201.2-f472b6)](https://bun.sh)
 
