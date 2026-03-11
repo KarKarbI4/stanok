@@ -1,30 +1,110 @@
 {
-  "private": true,
+  "name": "stanok",
+  "version": "0.2.0",
   "workspaces": ["packages/*"],
+  "description": "CLI for managing parallel git worktree-based development environments",
+  "type": "module",
+  "bin": {
+    "stanok": "./dist/cli/stanok.js",
+    "sk": "./dist/cli/stanok.js"
+  },
+  "main": "./dist/core/index.js",
+  "types": "./dist/core/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/core/index.d.ts",
+      "default": "./dist/core/index.js"
+    },
+    "./config": {
+      "types": "./dist/core/lib/config.d.ts",
+      "default": "./dist/core/lib/config.js"
+    },
+    "./auth": {
+      "types": "./dist/core/lib/auth.d.ts",
+      "default": "./dist/core/lib/auth.js"
+    },
+    "./jira": {
+      "types": "./dist/core/lib/jira.d.ts",
+      "default": "./dist/core/lib/jira.js"
+    },
+    "./bitbucket": {
+      "types": "./dist/core/lib/bitbucket.d.ts",
+      "default": "./dist/core/lib/bitbucket.js"
+    },
+    "./project": {
+      "types": "./dist/core/lib/project.d.ts",
+      "default": "./dist/core/lib/project.js"
+    },
+    "./plugin": {
+      "types": "./dist/core/lib/plugin.d.ts",
+      "default": "./dist/core/lib/plugin.js"
+    },
+    "./services": {
+      "types": "./dist/core/lib/services.d.ts",
+      "default": "./dist/core/lib/services.js"
+    },
+    "./registry": {
+      "types": "./dist/core/lib/registry.d.ts",
+      "default": "./dist/core/lib/registry.js"
+    },
+    "./utils": {
+      "types": "./dist/core/lib/utils/index.d.ts",
+      "default": "./dist/core/lib/utils/index.js"
+    },
+    "./plugin-jira": {
+      "types": "./dist/plugin-jira/index.d.ts",
+      "default": "./dist/plugin-jira/index.js"
+    },
+    "./plugin-bitbucket": {
+      "types": "./dist/plugin-bitbucket/index.d.ts",
+      "default": "./dist/plugin-bitbucket/index.js"
+    },
+    "./plugin-ide": {
+      "types": "./dist/plugin-ide/index.d.ts",
+      "default": "./dist/plugin-ide/index.js"
+    },
+    "./plugin-claude": {
+      "types": "./dist/plugin-claude/index.d.ts",
+      "default": "./dist/plugin-claude/index.js"
+    },
+    "./plugin-agent-cli": {
+      "types": "./dist/plugin-agent-cli/index.d.ts",
+      "default": "./dist/plugin-agent-cli/index.js"
+    },
+    "./plugin-portless": {
+      "types": "./dist/plugin-portless/index.d.ts",
+      "default": "./dist/plugin-portless/index.js"
+    }
+  },
+  "files": ["dist/"],
   "scripts": {
-    "test": "bun test --cwd packages/core && bun test --cwd packages/cli && bun test --cwd packages/plugin-jira && bun test --cwd packages/plugin-bitbucket && bun test --cwd packages/plugin-ide && bun test --cwd packages/plugin-claude && bun test --cwd packages/plugin-agent-cli && bun test --cwd packages/plugin-portless",
-    "test:core": "bun test --cwd packages/core",
-    "test:cli": "bun test --cwd packages/cli",
-    "test:plugin-jira": "bun test --cwd packages/plugin-jira",
-    "test:plugin-bitbucket": "bun test --cwd packages/plugin-bitbucket",
-    "test:plugin-ide": "bun test --cwd packages/plugin-ide",
-    "test:plugin-claude": "bun test --cwd packages/plugin-claude",
-    "test:plugin-agent-cli": "bun test --cwd packages/plugin-agent-cli",
-    "test:plugin-portless": "bun test --cwd packages/plugin-portless",
+    "build": "tsc --project tsconfig.build.json && tsc-alias --project tsconfig.build.json && chmod +x dist/cli/stanok.js",
+    "clean": "rm -rf dist",
+    "test": "bun test packages/core && bun test packages/cli && bun test packages/plugin-jira && bun test packages/plugin-bitbucket && bun test packages/plugin-ide && bun test packages/plugin-claude && bun test packages/plugin-agent-cli && bun test packages/plugin-portless",
+    "link": "bun link",
     "dev:raycast": "cd packages/raycast && npx ray develop",
     "build:raycast": "cd packages/raycast && npx ray build",
-    "lint:raycast": "cd packages/raycast && npx ray lint",
-    "link": "cd packages/cli && bun link",
-    "build": "bun run build:core && bun run build:cli && bun run build:plugins",
-    "build:core": "cd packages/core && tsc --project tsconfig.build.json",
-    "build:cli": "cd packages/cli && tsc --project tsconfig.build.json",
-    "build:plugins": "for d in packages/plugin-*; do (cd $d && tsc --project tsconfig.build.json); done",
-    "clean": "rm -rf packages/*/dist",
     "changeset": "bunx changeset",
     "version": "bunx changeset version",
     "release": "bun run clean && bun run build && bunx changeset publish"
   },
+  "keywords": ["git", "worktree", "cli", "dev-environment", "jira", "bitbucket"],
+  "author": "KarKarbI4",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KarKarbI4/stanok"
+  },
+  "homepage": "https://github.com/KarKarbI4/stanok",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "bun": ">=1.2"
+  },
   "devDependencies": {
-    "@changesets/cli": "2.30.0"
+    "@changesets/cli": "2.30.0",
+    "@types/bun": "latest",
+    "tsc-alias": "1.8.16"
   }
 }

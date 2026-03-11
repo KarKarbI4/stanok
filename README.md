@@ -2,10 +2,10 @@
 
 > CLI for managing parallel git worktree-based development environments
 
-[![npm](https://img.shields.io/npm/v/@stanok/cli)](https://www.npmjs.com/package/@stanok/cli)
+[![npm](https://img.shields.io/npm/v/stanok)](https://www.npmjs.com/package/stanok)
 [![CI](https://github.com/KarKarbI4/stanok/actions/workflows/ci.yml/badge.svg)](https://github.com/KarKarbI4/stanok/actions/workflows/ci.yml)
 [![tests](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/KarKarbI4/cf2b3c9663b43986fc6f989989b835a9/raw/stanok-tests.json)](https://github.com/KarKarbI4/stanok/actions/workflows/ci.yml)
-[![license](https://img.shields.io/npm/l/@stanok/cli)](LICENSE)
+[![license](https://img.shields.io/npm/l/stanok)](LICENSE)
 [![bun](https://img.shields.io/badge/runtime-bun%20%3E%3D%201.2-f472b6)](https://bun.sh)
 
 One `sk start TASK-123` creates a git worktree, installs deps, transitions Jira to "In Progress", and opens your IDE. One `sk done TASK-123` pushes, creates a PR, and transitions to "In Review".
@@ -13,7 +13,7 @@ One `sk start TASK-123` creates a git worktree, installs deps, transitions Jira 
 ## Installation
 
 ```bash
-bun install -g @stanok/cli
+bun install -g stanok
 ```
 
 Requirements:
@@ -120,25 +120,18 @@ To install permanently, run `bun run build` and import the extension in Raycast 
 
 ## Plugins
 
-All functionality beyond the core worktree management is provided by plugins. There are no built-in plugins — everything is loaded from `~/.stanok/plugins.ts`.
+All functionality beyond the core worktree management is provided by plugins. Six official plugins are included in the `stanok` package. They are loaded from `~/.stanok/plugins.ts`.
 
-### Installing plugins
+### Configuring plugins
 
-Install plugin packages in `~/.stanok/`:
-
-```bash
-cd ~/.stanok
-bun add @stanok/plugin-jira @stanok/plugin-bitbucket @stanok/plugin-ide
-```
-
-Then create `~/.stanok/plugins.ts` and list the plugins to load:
+Create `~/.stanok/plugins.ts` to select which plugins to load:
 
 ```ts
-import { definePlugins } from "@stanok/core/plugin";
+import { definePlugins } from "stanok/plugin";
 
-import { jiraPlugin } from "@stanok/plugin-jira";
-import { bitbucketPlugin } from "@stanok/plugin-bitbucket";
-import { ide } from "@stanok/plugin-ide";
+import { jiraPlugin } from "stanok/plugin-jira";
+import { bitbucketPlugin } from "stanok/plugin-bitbucket";
+import { ide } from "stanok/plugin-ide";
 
 export default definePlugins([
   jiraPlugin,
@@ -149,21 +142,21 @@ export default definePlugins([
 
 After editing, run `sk reload` to regenerate the command cache.
 
-### Available plugins
+### Built-in plugins
 
-| Package                    | What it does                                                                |
-| -------------------------- | --------------------------------------------------------------------------- |
-| `@stanok/plugin-jira`      | Jira issue tracker: `sk issue`, `sk issues`, task enrichment, status colors |
-| `@stanok/plugin-bitbucket` | Bitbucket code host: PR creation, build statuses, Bamboo log fetching       |
-| `@stanok/plugin-ide`       | Opens IDE on `sk start` (detects from `$EDITOR`)                            |
-| `@stanok/plugin-claude`    | Symlinks Claude Code project memory to worktrees                            |
-| `@stanok/plugin-agent-cli` | Splits iTerm/tmux pane for agent CLI on `sk start`                          |
-| `@stanok/plugin-portless`  | Portless dev server integration, `sk port` command                          |
+| Subpath                  | What it does                                                                |
+| ------------------------ | --------------------------------------------------------------------------- |
+| `stanok/plugin-jira`      | Jira issue tracker: `sk issue`, `sk issues`, task enrichment, status colors |
+| `stanok/plugin-bitbucket` | Bitbucket code host: PR creation, build statuses, Bamboo log fetching       |
+| `stanok/plugin-ide`       | Opens IDE on `sk start` (detects from `$EDITOR`)                            |
+| `stanok/plugin-claude`    | Symlinks Claude Code project memory to worktrees                            |
+| `stanok/plugin-agent-cli` | Splits iTerm/tmux pane for agent CLI on `sk start`                          |
+| `stanok/plugin-portless`  | Portless dev server integration, `sk port` command                          |
 
 ### Writing a plugin
 
 ```ts
-import { definePlugin } from "@stanok/core/plugin";
+import { definePlugin } from "stanok/plugin";
 
 export const myPlugin = definePlugin({
   name: "my-plugin",
@@ -348,4 +341,4 @@ bun run release
 | `minor` | New features, non-breaking changes         | 0.1.0 → 0.2.0 |
 | `major` | Breaking changes (API, config, CLI output) | 0.2.0 → 1.0.0 |
 
-Changing `@stanok/core` automatically bumps all dependent packages (`cli`, plugins) via `updateInternalDependencies: "patch"` in `.changeset/config.json`.
+Since stanok is now a single package, `bun run version` bumps the one version and generates the changelog.

@@ -6,3 +6,5 @@ sentry-bot/
 SENTRY_SCAN.md
 .claude/
 .cursor/
+packages/cli/ARCHITECTURE.md
+packages/cli/SETUP.md

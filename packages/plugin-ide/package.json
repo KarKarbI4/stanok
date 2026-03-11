@@ -1,48 +1,5 @@
 {
+  "private": true,
   "name": "@stanok/plugin-ide",
-  "version": "0.1.0",
-  "description": "IDE launcher plugin for Stanok",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist/"
-  ],
-  "scripts": {
-    "build": "tsc --project tsconfig.build.json",
-    "clean": "rm -rf dist"
-  },
-  "keywords": [
-    "stanok",
-    "plugin",
-    "ide",
-    "cursor",
-    "vscode"
-  ],
-  "author": "KarKarbI4",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/KarKarbI4/stanok",
-    "directory": "packages/plugin-ide"
-  },
-  "homepage": "https://github.com/KarKarbI4/stanok",
-  "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "bun": ">=1.2"
-  },
-  "dependencies": {
-    "@stanok/core": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  }
+  "type": "module"
 }

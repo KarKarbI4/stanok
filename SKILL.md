@@ -27,7 +27,7 @@ Use when the user:
 
 ```bash
 # Install globally
-bun install -g @stanok/cli
+bun install -g stanok
 
 # Register a repo
 cd ~/projects/my-app
@@ -146,25 +146,18 @@ sk port TASK-123              # show dev server port
 
 ## Installing Plugins
 
-All functionality beyond core worktree management is provided by plugins. There are no built-in plugins -- everything is loaded from `~/.stanok/plugins.ts`.
+All functionality beyond core worktree management is provided by plugins. Six official plugins are included in the `stanok` package. They are loaded from `~/.stanok/plugins.ts`.
 
-### Step 1: Install plugin packages
-
-```bash
-cd ~/.stanok
-bun add @stanok/plugin-jira @stanok/plugin-bitbucket @stanok/plugin-ide
-```
-
-### Step 2: Create plugins.ts
+### Step 1: Create plugins.ts
 
 Create `~/.stanok/plugins.ts`:
 
 ```ts
-import { definePlugins } from "@stanok/core/plugin";
+import { definePlugins } from "stanok/plugin";
 
-import { jiraPlugin } from "@stanok/plugin-jira";
-import { bitbucketPlugin } from "@stanok/plugin-bitbucket";
-import { ide } from "@stanok/plugin-ide";
+import { jiraPlugin } from "stanok/plugin-jira";
+import { bitbucketPlugin } from "stanok/plugin-bitbucket";
+import { ide } from "stanok/plugin-ide";
 
 export const plugins = definePlugins([
   jiraPlugin,
@@ -185,12 +178,12 @@ This regenerates the command cache at `~/.stanok/commands.json`.
 
 | Package | Purpose | Settings |
 |---------|---------|----------|
-| `@stanok/plugin-jira` | Jira issue tracker, `sk issue` / `sk issues` commands, task enrichment | `jira.url`, `jira.project`, `jira.exploreIssues` |
-| `@stanok/plugin-bitbucket` | Bitbucket PRs, build statuses, Bamboo logs | `bitbucket.url`, `bitbucket.repo`, `bamboo.url` |
-| `@stanok/plugin-ide` | Opens IDE on `sk start` | `ide.binary`, `ide.args` |
-| `@stanok/plugin-claude` | Symlinks Claude Code project memory to worktrees | (none) |
-| `@stanok/plugin-agent-cli` | Splits iTerm/tmux pane for agent CLI | `agent-cli.terminal`, `agent-cli.binary`, `agent-cli.args` |
-| `@stanok/plugin-portless` | Portless dev server, `sk port` command | (none) |
+| `stanok/plugin-jira` | Jira issue tracker, `sk issue` / `sk issues` commands, task enrichment | `jira.url`, `jira.project`, `jira.exploreIssues` |
+| `stanok/plugin-bitbucket` | Bitbucket PRs, build statuses, Bamboo logs | `bitbucket.url`, `bitbucket.repo`, `bamboo.url` |
+| `stanok/plugin-ide` | Opens IDE on `sk start` | `ide.binary`, `ide.args` |
+| `stanok/plugin-claude` | Symlinks Claude Code project memory to worktrees | (none) |
+| `stanok/plugin-agent-cli` | Splits iTerm/tmux pane for agent CLI | `agent-cli.terminal`, `agent-cli.binary`, `agent-cli.args` |
+| `stanok/plugin-portless` | Portless dev server, `sk port` command | (none) |
 
 ### Configuring Plugin Settings
 
@@ -253,12 +246,12 @@ In `.stanok/settings.local.json` (per-project, gitignored):
 
 ## Creating Custom Plugins
 
-Use `definePlugin()` from `@stanok/core/plugin`.
+Use `definePlugin()` from `stanok/plugin`.
 
 ### Minimal Plugin
 
 ```ts
-import { definePlugin } from "@stanok/core/plugin";
+import { definePlugin } from "stanok/plugin";
 
 export const myPlugin = definePlugin({
   name: "my-plugin",
@@ -269,8 +262,8 @@ export const myPlugin = definePlugin({
 ### Full Plugin Structure
 
 ```ts
-import { definePlugin } from "@stanok/core/plugin";
-import type { PluginContext, AuthResolver } from "@stanok/core/plugin";
+import { definePlugin } from "stanok/plugin";
+import type { PluginContext, AuthResolver } from "stanok/plugin";
 
 interface MySettings {
   "my-plugin.url": string;
@@ -417,8 +410,8 @@ bun add my-stanok-plugin
 Add it to `~/.stanok/plugins.ts`:
 
 ```ts
-import { definePlugins } from "@stanok/core/plugin";
-import { jiraPlugin } from "@stanok/plugin-jira";
+import { definePlugins } from "stanok/plugin";
+import { jiraPlugin } from "stanok/plugin-jira";
 import { myPlugin } from "my-stanok-plugin";
 
 export const plugins = definePlugins([

@@ -19,7 +19,7 @@ import {
   parseTaskId, taskEnv, envToArgs, envTags as envTagsPlain,
   statusColor, loadStatusConfig, lastEnvFromTasks, filterTasks, filterTrackerIssues,
   type TaskMeta, type TrackerIssue,
-} from "@stanok/core";
+} from "stanok";
 
 const HOME = homedir();
 

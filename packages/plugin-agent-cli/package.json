@@ -1,48 +1,5 @@
 {
+  "private": true,
   "name": "@stanok/plugin-agent-cli",
-  "version": "0.1.0",
-  "description": "Agent CLI terminal split plugin for Stanok",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist/"
-  ],
-  "scripts": {
-    "build": "tsc --project tsconfig.build.json",
-    "clean": "rm -rf dist"
-  },
-  "keywords": [
-    "stanok",
-    "plugin",
-    "terminal",
-    "iterm",
-    "tmux"
-  ],
-  "author": "KarKarbI4",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/KarKarbI4/stanok",
-    "directory": "packages/plugin-agent-cli"
-  },
-  "homepage": "https://github.com/KarKarbI4/stanok",
-  "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "bun": ">=1.2"
-  },
-  "dependencies": {
-    "@stanok/core": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  }
+  "type": "module"
 }

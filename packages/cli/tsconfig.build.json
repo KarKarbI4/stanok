@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig.build.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "."
-  },
-  "include": ["stanok.ts", "lib/**/*.ts"],
-  "exclude": ["**/__tests__/**", "**/*.test.ts"]
-}
