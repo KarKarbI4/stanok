@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "test": "bun test --cwd packages/core && bun test --cwd packages/cli && bun test --cwd packages/plugin-jira && bun test --cwd packages/plugin-bitbucket && bun test --cwd packages/plugin-ide && bun test --cwd packages/plugin-claude && bun test --cwd packages/plugin-agent-cli && bun test --cwd packages/plugin-portless",
+    "test:core": "bun test --cwd packages/core",
+    "test:cli": "bun test --cwd packages/cli",
+    "test:plugin-jira": "bun test --cwd packages/plugin-jira",
+    "test:plugin-bitbucket": "bun test --cwd packages/plugin-bitbucket",
+    "test:plugin-ide": "bun test --cwd packages/plugin-ide",
+    "test:plugin-claude": "bun test --cwd packages/plugin-claude",
+    "test:plugin-agent-cli": "bun test --cwd packages/plugin-agent-cli",
+    "test:plugin-portless": "bun test --cwd packages/plugin-portless",
+    "dev:raycast": "cd packages/raycast && npx ray develop",
+    "build:raycast": "cd packages/raycast && npx ray build",
+    "lint:raycast": "cd packages/raycast && npx ray lint",
+    "link": "cd packages/cli && bun link",
+    "build": "bun run build:core && bun run build:cli && bun run build:plugins",
+    "build:core": "cd packages/core && tsc --project tsconfig.build.json",
+    "build:cli": "cd packages/cli && tsc --project tsconfig.build.json",
+    "build:plugins": "for d in packages/plugin-*; do (cd $d && tsc --project tsconfig.build.json); done",
+    "clean": "rm -rf packages/*/dist",
+    "changeset": "bunx changeset",
+    "version": "bunx changeset version",
+    "release": "bun run clean && bun run build && bunx changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "2.30.0"
+  }
+}
