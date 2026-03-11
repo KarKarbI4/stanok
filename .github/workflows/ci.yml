@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install
+
+      - name: Type check
+        run: bun run build
+
+      - name: Test
+        run: bun test --cwd packages/core && bun test --cwd packages/cli && bun test --cwd packages/plugin-jira && bun test --cwd packages/plugin-bitbucket && bun test --cwd packages/plugin-ide && bun test --cwd packages/plugin-claude && bun test --cwd packages/plugin-agent-cli && bun test --cwd packages/plugin-portless

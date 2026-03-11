@@ -1,0 +1,39 @@
+{
+  "name": "@stanok/cli",
+  "version": "0.1.0",
+  "description": "CLI for managing parallel git worktree-based development environments",
+  "type": "module",
+  "main": "./dist/stanok.js",
+  "types": "./dist/stanok.d.ts",
+  "bin": {
+    "stanok": "./dist/stanok.js",
+    "sk": "./dist/stanok.js"
+  },
+  "files": ["dist/"],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json && chmod +x dist/stanok.js",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["git", "worktree", "cli", "dev-environment", "jira", "bitbucket"],
+  "author": "KarKarbI4",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KarKarbI4/stanok",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/KarKarbI4/stanok",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "bun": ">=1.2"
+  },
+  "dependencies": {
+    "@stanok/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@stanok/plugin-jira": "workspace:*"
+  }
+}

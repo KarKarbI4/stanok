@@ -1,0 +1,73 @@
+{
+  "name": "@stanok/core",
+  "version": "0.1.0",
+  "description": "Core library for Stanok — parallel git worktree-based development environments",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./config": {
+      "types": "./dist/lib/config.d.ts",
+      "default": "./dist/lib/config.js"
+    },
+    "./auth": {
+      "types": "./dist/lib/auth.d.ts",
+      "default": "./dist/lib/auth.js"
+    },
+    "./jira": {
+      "types": "./dist/lib/jira.d.ts",
+      "default": "./dist/lib/jira.js"
+    },
+    "./bitbucket": {
+      "types": "./dist/lib/bitbucket.d.ts",
+      "default": "./dist/lib/bitbucket.js"
+    },
+    "./project": {
+      "types": "./dist/lib/project.d.ts",
+      "default": "./dist/lib/project.js"
+    },
+    "./plugin": {
+      "types": "./dist/lib/plugin.d.ts",
+      "default": "./dist/lib/plugin.js"
+    },
+    "./services": {
+      "types": "./dist/lib/services.d.ts",
+      "default": "./dist/lib/services.js"
+    },
+    "./registry": {
+      "types": "./dist/lib/registry.d.ts",
+      "default": "./dist/lib/registry.js"
+    },
+    "./utils": {
+      "types": "./dist/lib/utils/index.d.ts",
+      "default": "./dist/lib/utils/index.js"
+    }
+  },
+  "files": ["dist/"],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["git", "worktree", "cli", "dev-environment"],
+  "author": "KarKarbI4",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KarKarbI4/stanok",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/KarKarbI4/stanok",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "bun": ">=1.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
