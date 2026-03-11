@@ -18,7 +18,8 @@ Requirements:
 
 - **Bun** >= 1.2
 - **git** >= 2.15 (worktree support)
-- **macOS** (iTerm + AppleScript for terminal automation)
+
+Some plugins (`plugin-agent-cli`, `plugin-ide`) use iTerm/AppleScript on macOS. Core CLI and worktree management work on any OS.
 
 After installation, the CLI is available as `stanok` or shorthand `sk`.
 
