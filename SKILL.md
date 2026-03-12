@@ -1,6 +1,6 @@
 ---
 name: stanok
-description: Use Stanok CLI to manage parallel git worktree-based development environments. Covers CLI usage (sk start, sk stop, sk ls, sk pr, etc.), installing and configuring plugins, and creating custom plugins with the definePlugin API. Use when the user asks about stanok, worktree management, stanok plugins, or wants to extend stanok functionality.
+description: Use Stanok CLI to manage parallel git worktree-based development environments. Covers CLI usage (stanok start, stanok stop, stanok ls, stanok pr, etc.), installing and configuring plugins, and creating custom plugins with the definePlugin API. Use when the user asks about stanok, worktree management, stanok plugins, or wants to extend stanok functionality.
 metadata:
   author: stanok
   version: "1.0.0"
@@ -8,7 +8,7 @@ metadata:
 
 # Stanok CLI
 
-Stanok (`sk`) is a CLI for managing parallel git worktree-based development environments. One `sk start TASK-123` creates a git worktree, installs deps, and opens your IDE. One `sk stop TASK-123 --remove` cleans it up.
+Stanok (`stanok`) is a CLI for managing parallel git worktree-based development environments. One `stanok start TASK-123` creates a git worktree, installs deps, and opens your IDE. One `stanok stop TASK-123 --remove` cleans it up.
 
 ## When to Use This Skill
 
@@ -18,7 +18,7 @@ Use when the user:
 - Wants to start, stop, list, or manage development environments
 - Needs to configure stanok for a repository
 - Wants to install, configure, or create stanok plugins
-- Asks about `sk` or `stanok` commands
+- Asks about `stanok` commands
 - Needs help with stanok project configuration (`.stanok/settings.json`)
 
 ## CLI Usage
@@ -31,86 +31,86 @@ bun install -g stanok
 
 # Register a repo
 cd ~/projects/my-app
-sk init
+stanok init
 
 # Configure auth tokens (Jira, Bitbucket, Bamboo)
-sk login
+stanok login
 ```
 
 ### Core Workflow
 
 ```bash
 # Start working on a task (creates worktree, opens IDE, runs hooks)
-sk start TASK-123
+stanok start TASK-123
 
 # Start with env vars
-sk start TASK-123 --env STAND=dev --env DEBUG=true
+stanok start TASK-123 --env STAND=dev --env DEBUG=true
 
 # Commit with auto task ID prefix (from current branch)
-sk c "fix header alignment"
+stanok c "fix header alignment"
 # → TASK-123 | fix header alignment
 
 # Set/show env vars in worktree
-sk env KEY=VALUE
+stanok env KEY=VALUE
 
 # List active worktrees
-sk ls
+stanok ls
 
 # Stop worktree
-sk stop TASK-123
+stanok stop TASK-123
 
 # Stop and remove worktree
-sk stop TASK-123 --remove
+stanok stop TASK-123 --remove
 ```
 
 ### Git / Worktree Commands
 
 ```bash
 # Remove merged/orphaned/stale worktrees
-sk prune
-sk prune --dry-run
+stanok prune
+stanok prune --dry-run
 
 # Rename task (branch + worktree)
-sk mv OLD-ID NEW-ID
+stanok mv OLD-ID NEW-ID
 
 # Re-sync copyFiles to worktree
-sk copy TASK-123
+stanok copy TASK-123
 
 # Run command in worktree context
-sk run TASK-123 npm test
+stanok run TASK-123 npm test
 
 # Open or create Pull Request
-sk pr
-sk pr --build    # show build status
+stanok pr
+stanok pr --build    # show build status
 
 # Open worktree in Finder or terminal
-sk open TASK-123
-sk open TASK-123 --terminal
+stanok open TASK-123
+stanok open TASK-123 --terminal
 
 # Show diff from base branch
-sk diff TASK-123
-sk diff TASK-123 --stat
+stanok diff TASK-123
+stanok diff TASK-123 --stat
 ```
 
 ### Admin Commands
 
 ```bash
 # Show resolved configuration
-sk config
+stanok config
 
 # Regenerate settings schema after editing plugins.ts
-sk reload
+stanok reload
 
 # Open auth.json in editor
-sk auth
+stanok auth
 
 # Check environment and configuration
-sk doctor
+stanok doctor
 
 # Shell completions
-eval "$(sk completions zsh)"    # add to ~/.zshrc
-eval "$(sk completions bash)"   # add to ~/.bashrc
-sk completions fish | source    # fish
+eval "$(stanok completions zsh)"    # add to ~/.zshrc
+eval "$(stanok completions bash)"   # add to ~/.bashrc
+stanok completions fish | source    # fish
 ```
 
 ### Plugin-Provided Commands
@@ -119,17 +119,17 @@ These require the corresponding plugin in `~/.stanok/plugins.ts`:
 
 ```bash
 # Jira plugin
-sk issue TASK-123 --text      # show issue info
-sk issue TASK-123             # open in browser
-sk issue --my                 # list my issues
-sk issues                     # my issues from active sprint
-sk issues --format=json       # JSON output
+stanok issue TASK-123 --text      # show issue info
+stanok issue TASK-123             # open in browser
+stanok issue --my                 # list my issues
+stanok issues                     # my issues from active sprint
+stanok issues --format=json       # JSON output
 
 # Portless plugin
-sk port TASK-123              # show dev server port
+stanok port TASK-123              # show dev server port
 ```
 
-## How `sk start` Works
+## How `stanok start` Works
 
 1. Creates git worktree at `../<repo>__worktrees/<task-id>` from `origin/<baseBranch>`
 2. Detects or creates branch using `branchTemplate` (default: `{task}` -> `TASK-123`)
@@ -169,7 +169,7 @@ export const plugins = definePlugins([
 ### Step 3: Reload
 
 ```bash
-sk reload
+stanok reload
 ```
 
 This regenerates the command cache at `~/.stanok/commands.json`.
@@ -178,12 +178,12 @@ This regenerates the command cache at `~/.stanok/commands.json`.
 
 | Package | Purpose | Settings |
 |---------|---------|----------|
-| `stanok/plugin-jira` | Jira issue tracker, `sk issue` / `sk issues` commands, task enrichment | `jira.url`, `jira.project`, `jira.exploreIssues` |
+| `stanok/plugin-jira` | Jira issue tracker, `stanok issue` / `stanok issues` commands, task enrichment | `jira.url`, `jira.project`, `jira.exploreIssues` |
 | `stanok/plugin-bitbucket` | Bitbucket PRs, build statuses, Bamboo logs | `bitbucket.url`, `bitbucket.repo`, `bamboo.url` |
-| `stanok/plugin-ide` | Opens IDE on `sk start` | `ide.binary`, `ide.args` |
+| `stanok/plugin-ide` | Opens IDE on `stanok start` | `ide.binary`, `ide.args` |
 | `stanok/plugin-claude` | Symlinks Claude Code project memory to worktrees | (none) |
 | `stanok/plugin-agent-cli` | Splits iTerm/tmux pane for agent CLI | `agent-cli.terminal`, `agent-cli.binary`, `agent-cli.args` |
-| `stanok/plugin-portless` | Portless dev server, `sk port` command | (none) |
+| `stanok/plugin-portless` | Portless dev server, `stanok port` command | (none) |
 
 ### Configuring Plugin Settings
 
@@ -240,7 +240,7 @@ In `.stanok/settings.local.json` (per-project, gitignored):
 | `baseBranch` | `"master"` | Branch to create worktrees from |
 | `branchTemplate` | `"{task}"` | Branch name pattern (`{task}` is replaced with task ID) |
 | `envFile` | `".env.development.local"` | File for worktree env vars |
-| `mergeDetection` | `"Pull request"` | Grep pattern to detect merged branches in `sk prune` |
+| `mergeDetection` | `"Pull request"` | Grep pattern to detect merged branches in `stanok prune` |
 | `proxyPort` | `1355` | Base port for dev server proxy |
 | `pruneIgnore` | — | Glob patterns to exclude from prune |
 
@@ -279,7 +279,7 @@ export const myPlugin = definePlugin<MySettings>({
     "my-plugin.enabled": true,
   },
 
-  // Patterns to exclude from `sk prune`
+  // Patterns to exclude from `stanok prune`
   pruneIgnore: [".my-plugin-cache/**"],
 
   // ── Services ──
@@ -300,7 +300,7 @@ export const myPlugin = definePlugin<MySettings>({
   },
 
   // ── CLI Commands ──
-  // Register custom `sk <name>` commands.
+  // Register custom `stanok <name>` commands.
   // Return null if the command can't activate.
   commands: {
     "my-cmd"(settings, auth) {
@@ -325,7 +325,7 @@ export const myPlugin = definePlugin<MySettings>({
     console.log(`Created worktree for ${ctx.taskId} at ${ctx.wtPath}`);
   },
   async preStart(ctx, settings) {
-    // Before IDE/tools open (every sk start)
+    // Before IDE/tools open (every stanok start)
   },
   async preStop(ctx, settings) {
     // Before worktree stopped
@@ -335,7 +335,7 @@ export const myPlugin = definePlugin<MySettings>({
   },
 
   // ── Task Enrichment ──
-  // Mutate tasks in-place to add extra data for `sk ls --format=json`
+  // Mutate tasks in-place to add extra data for `stanok ls --format=json`
   async enrich(tasks, settings, auth) {
     for (const task of tasks) {
       task.summary = "Enriched summary";
@@ -420,7 +420,7 @@ export const plugins = definePlugins([
 ]);
 ```
 
-Then run `sk reload` to regenerate the command cache.
+Then run `stanok reload` to regenerate the command cache.
 
 For local development, you can also import from a relative path:
 
@@ -448,7 +448,7 @@ const a = auth("https://my-service.example.com");
 // Returns { token: string } or null
 ```
 
-Auth tokens are stored in `~/.stanok/auth.json` and configured via `sk login`. The resolver matches by URL prefix.
+Auth tokens are stored in `~/.stanok/auth.json` and configured via `stanok login`. The resolver matches by URL prefix.
 
 ## File Structure Reference
 
@@ -458,7 +458,7 @@ Auth tokens are stored in `~/.stanok/auth.json` and configured via `sk login`. T
   node_modules/        # Installed plugins
   plugins.ts           # Plugin registry
   settings.json        # Global settings (dot-separated keys)
-  auth.json            # API tokens (managed by sk login)
+  auth.json            # API tokens (managed by stanok login)
   state.json           # Registered repos, env vars (auto-managed)
   commands.json        # Plugin command cache (auto-generated)
 

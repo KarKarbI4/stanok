@@ -8,7 +8,7 @@
 [![license](https://img.shields.io/npm/l/stanok)](LICENSE)
 [![bun](https://img.shields.io/badge/runtime-bun%20%3E%3D%201.2-f472b6)](https://bun.sh)
 
-One `sk start TASK-123` creates a git worktree, installs deps, transitions Jira to "In Progress", and opens your IDE. One `sk done TASK-123` pushes, creates a PR, and transitions to "In Review".
+One `stanok start TASK-123` creates a git worktree, installs deps, transitions Jira to "In Progress", and opens your IDE. One `stanok done TASK-123` pushes, creates a PR, and transitions to "In Review".
 
 ## Installation
 
@@ -23,33 +23,33 @@ Requirements:
 
 Some plugins (`plugin-agent-cli`, `plugin-ide`) use iTerm/AppleScript on macOS. Core CLI and worktree management work on any OS.
 
-After installation, the CLI is available as `stanok` or shorthand `sk`.
+After installation, the CLI is available as `stanok`.
 
 ## Quickstart
 
 ```bash
 # 1. Register current repo
 cd ~/projects/my-app
-sk init
+stanok init
 
 # 2. Configure auth tokens (Jira, Bitbucket)
-sk login
+stanok login
 
 # 3. Start working on a task
-sk start TASK-123
+stanok start TASK-123
 
 # 4. Commit (auto-prefixes with task ID)
-sk c "fix header alignment"
+stanok c "fix header alignment"
 # → TASK-123 | fix header alignment
 
 # 5. List active worktrees
-sk ls
+stanok ls
 
 # 6. Remove worktree when done
-sk stop TASK-123 --remove
+stanok stop TASK-123 --remove
 ```
 
-`sk start` creates a git worktree at `../<repo>__worktrees/task-123`, checks out branch `feature/TASK-123` (from `origin/master`), copies shared files, writes env vars, and runs plugin hooks (open IDE, split terminal, etc.).
+`stanok start` creates a git worktree at `../<repo>__worktrees/task-123`, checks out branch `feature/TASK-123` (from `origin/master`), copies shared files, writes env vars, and runs plugin hooks (open IDE, split terminal, etc.).
 
 ### Commands
 
@@ -57,49 +57,49 @@ sk stop TASK-123 --remove
 
 | Command                                | Description                       |
 | -------------------------------------- | --------------------------------- |
-| `sk start <TASK_ID> [--env KEY=VALUE]` | Create worktree and start working |
-| `sk c <message>`                       | Commit with task ID prefix        |
-| `sk env [KEY=VALUE ...]`               | Set/show env vars in worktree     |
-| `sk ls`                                | List worktrees                    |
+| `stanok start <TASK_ID> [--env KEY=VALUE]` | Create worktree and start working |
+| `stanok c <message>`                       | Commit with task ID prefix        |
+| `stanok env [KEY=VALUE ...]`               | Set/show env vars in worktree     |
+| `stanok ls`                                | List worktrees                    |
 
 #### Git / Worktree
 
 | Command                         | Description                        |
 | ------------------------------- | ---------------------------------- |
-| `sk stop <TASK_ID> [--remove]`  | Stop worktree, optionally remove   |
-| `sk prune [--dry-run]`          | Remove merged/orphaned worktrees   |
-| `sk mv <OLD_ID> <NEW_ID>`       | Rename task (branch + worktree)    |
-| `sk copy [TASK_ID]`             | Re-sync copyFiles to worktree      |
-| `sk run <TASK_ID> <command...>` | Run command in worktree context    |
-| `sk pr [--build]`               | Open PR or show build status       |
-| `sk open [TASK_ID] [--terminal]`| Open worktree in Finder / terminal |
-| `sk diff [TASK_ID] [--stat]`    | Show diff from base branch         |
+| `stanok stop <TASK_ID> [--remove]`  | Stop worktree, optionally remove   |
+| `stanok prune [--dry-run]`          | Remove merged/orphaned worktrees   |
+| `stanok mv <OLD_ID> <NEW_ID>`       | Rename task (branch + worktree)    |
+| `stanok copy [TASK_ID]`             | Re-sync copyFiles to worktree      |
+| `stanok run <TASK_ID> <command...>` | Run command in worktree context    |
+| `stanok pr [--build]`               | Open PR or show build status       |
+| `stanok open [TASK_ID] [--terminal]`| Open worktree in Finder / terminal |
+| `stanok diff [TASK_ID] [--stat]`    | Show diff from base branch         |
 
 #### Admin
 
 | Command                            | Description                              |
 | ---------------------------------- | ---------------------------------------- |
-| `sk login`                         | Configure Jira + Bitbucket + Bamboo auth |
-| `sk init`                          | Register cwd as stanok repo              |
-| `sk config`                        | Show resolved configuration              |
-| `sk reload`                        | Regenerate settings schema               |
-| `sk auth`                          | Open auth.json in default editor         |
-| `sk doctor`                        | Check environment and configuration      |
-| `sk completions <zsh\|bash\|fish>` | Generate shell completions               |
+| `stanok login`                         | Configure Jira + Bitbucket + Bamboo auth |
+| `stanok init`                          | Register cwd as stanok repo              |
+| `stanok config`                        | Show resolved configuration              |
+| `stanok reload`                        | Regenerate settings schema               |
+| `stanok auth`                          | Open auth.json in default editor         |
+| `stanok doctor`                        | Check environment and configuration      |
+| `stanok completions <zsh\|bash\|fish>` | Generate shell completions               |
 
-Plugins can add extra commands (e.g. `sk issue`, `sk issues`, `sk port`).
+Plugins can add extra commands (e.g. `stanok issue`, `stanok issues`, `stanok port`).
 
 ### Shell completions
 
 ```bash
 # zsh — add to ~/.zshrc
-eval "$(sk completions zsh)"
+eval "$(stanok completions zsh)"
 
 # bash — add to ~/.bashrc
-eval "$(sk completions bash)"
+eval "$(stanok completions bash)"
 
 # fish
-sk completions fish | source
+stanok completions fish | source
 ```
 
 ## Raycast extension
@@ -140,18 +140,18 @@ export default definePlugins([
 ]);
 ```
 
-After editing, run `sk reload` to regenerate the command cache.
+After editing, run `stanok reload` to regenerate the command cache.
 
 ### Built-in plugins
 
 | Subpath                  | What it does                                                                |
 | ------------------------ | --------------------------------------------------------------------------- |
-| `stanok/plugin-jira`      | Jira issue tracker: `sk issue`, `sk issues`, task enrichment, status colors |
+| `stanok/plugin-jira`      | Jira issue tracker: `stanok issue`, `stanok issues`, task enrichment, status colors |
 | `stanok/plugin-bitbucket` | Bitbucket code host: PR creation, build statuses, Bamboo log fetching       |
-| `stanok/plugin-ide`       | Opens IDE on `sk start` (detects from `$EDITOR`)                            |
+| `stanok/plugin-ide`       | Opens IDE on `stanok start` (detects from `$EDITOR`)                            |
 | `stanok/plugin-claude`    | Symlinks Claude Code project memory to worktrees                            |
-| `stanok/plugin-agent-cli` | Splits iTerm/tmux pane for agent CLI on `sk start`                          |
-| `stanok/plugin-portless`  | Portless dev server integration, `sk port` command                          |
+| `stanok/plugin-agent-cli` | Splits iTerm/tmux pane for agent CLI on `stanok start`                          |
+| `stanok/plugin-portless`  | Portless dev server integration, `stanok port` command                          |
 
 ### Writing a plugin
 
@@ -232,7 +232,7 @@ User config lives in `~/.stanok/`:
 | `auth.json`     | API tokens for Jira, Bitbucket, Bamboo                 |
 | `plugins.ts`    | Plugin registry                                        |
 | `state.json`    | Registered repos, per-repo env vars (auto-managed)     |
-| `commands.json` | Cached plugin commands (auto-generated by `sk reload`) |
+| `commands.json` | Cached plugin commands (auto-generated by `stanok reload`) |
 
 ### settings.json
 
@@ -249,7 +249,7 @@ Global defaults using dot-separated keys. These apply to all repos unless overri
 
 ### auth.json
 
-Created by `sk login`. Stores API tokens:
+Created by `stanok login`. Stores API tokens:
 
 ```json
 {
@@ -259,11 +259,11 @@ Created by `sk login`. Stores API tokens:
 }
 ```
 
-You can also edit directly with `sk auth`.
+You can also edit directly with `stanok auth`.
 
 ## Repository-level configuration
 
-`sk init` creates a `.stanok/` directory in the repo root with project settings. It also adds `.stanok/*.local*` to `.gitignore`.
+`stanok init` creates a `.stanok/` directory in the repo root with project settings. It also adds `.stanok/*.local*` to `.gitignore`.
 
 ### .stanok/settings.json (committed)
 

@@ -7,8 +7,7 @@
   "description": "CLI for managing parallel git worktree-based development environments",
   "type": "module",
   "bin": {
-    "stanok": "./dist/cli/stanok.js",
-    "sk": "./dist/cli/stanok.js"
+    "stanok": "./dist/cli/stanok.js"
   },
   "main": "./dist/core/index.js",
   "types": "./dist/core/index.d.ts",

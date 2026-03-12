@@ -23,12 +23,12 @@ describe("completions", () => {
     expect(stdout).toContain("pr:");
   });
 
-  test("zsh: registers sk and stanok", async () => {
+  test("zsh: registers stanok", async () => {
     env = await createTempRepo();
     const { stdout } = await captureOutput(() =>
       withTestEnv(env, () => cmdCompletions(["zsh"])),
     );
-    expect(stdout).toContain("compdef _sk sk stanok");
+    expect(stdout).toContain("compdef _stanok stanok");
   });
 
   test("zsh: includes task ID completion function", async () => {
@@ -36,8 +36,8 @@ describe("completions", () => {
     const { stdout } = await captureOutput(() =>
       withTestEnv(env, () => cmdCompletions(["zsh"])),
     );
-    expect(stdout).toContain("_sk_task_ids");
-    expect(stdout).toContain("sk ls --format=ids");
+    expect(stdout).toContain("_stanok_task_ids");
+    expect(stdout).toContain("stanok ls --format=ids");
   });
 
   // ── bash ──
@@ -47,8 +47,7 @@ describe("completions", () => {
     const { stdout } = await captureOutput(() =>
       withTestEnv(env, () => cmdCompletions(["bash"])),
     );
-    expect(stdout).toContain("complete -F _sk sk");
-    expect(stdout).toContain("complete -F _sk stanok");
+    expect(stdout).toContain("complete -F _stanok stanok");
     expect(stdout).toContain("start");
     expect(stdout).toContain("stop");
     expect(stdout).toContain("ls");
@@ -60,7 +59,7 @@ describe("completions", () => {
     const { stdout } = await captureOutput(() =>
       withTestEnv(env, () => cmdCompletions(["bash"])),
     );
-    expect(stdout).toContain("sk ls --format=ids");
+    expect(stdout).toContain("stanok ls --format=ids");
   });
 
   test("bash: includes subcommand flags", async () => {
@@ -80,7 +79,6 @@ describe("completions", () => {
     const { stdout } = await captureOutput(() =>
       withTestEnv(env, () => cmdCompletions(["fish"])),
     );
-    expect(stdout).toContain("complete -c sk");
     expect(stdout).toContain("complete -c stanok");
     expect(stdout).toContain("start");
     expect(stdout).toContain("stop");
@@ -93,7 +91,6 @@ describe("completions", () => {
     const { stdout } = await captureOutput(() =>
       withTestEnv(env, () => cmdCompletions(["fish"])),
     );
-    expect(stdout).toContain("complete -c sk -f");
     expect(stdout).toContain("complete -c stanok -f");
   });
 
@@ -102,7 +99,7 @@ describe("completions", () => {
     const { stdout } = await captureOutput(() =>
       withTestEnv(env, () => cmdCompletions(["fish"])),
     );
-    expect(stdout).toContain("sk ls --format=ids");
+    expect(stdout).toContain("stanok ls --format=ids");
   });
 
   test("fish: includes subcommand flags", async () => {

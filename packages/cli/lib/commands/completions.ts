@@ -24,14 +24,14 @@ function zshScript(): string {
 
   const describeExt = cachedEntries.length ? `\n    _describe -t extensions -V 'extensions' extensions` : "";
 
-  return `_sk() {
+  return `_stanok() {
   local -a workflow git admin${cachedEntries.length ? " extensions" : ""}
 
 ${groups}${extGroup}
 
-  _sk_task_ids() {
+  _stanok_task_ids() {
     local -a ids
-    ids=(\${(f)"$(sk ls --format=ids 2>/dev/null)"})
+    ids=(\${(f)"$(stanok ls --format=ids 2>/dev/null)"})
     _describe 'task id' ids
   }
 
@@ -45,7 +45,7 @@ ${groups}${extGroup}
   case $words[2] in
     start)
       if (( CURRENT == 3 )); then
-        _sk_task_ids
+        _stanok_task_ids
       else
         _arguments \\
           '*--env=[KEY=VALUE]:env var:'
@@ -53,7 +53,7 @@ ${groups}${extGroup}
       ;;
     stop)
       if (( CURRENT == 3 )); then
-        _sk_task_ids
+        _stanok_task_ids
       else
         _arguments '--remove[Remove worktree]'
       fi
@@ -66,19 +66,19 @@ ${groups}${extGroup}
       ;;
     mv|copy|run)
       if (( CURRENT == 3 )); then
-        _sk_task_ids
+        _stanok_task_ids
       fi
       ;;
     open)
       if (( CURRENT == 3 )); then
-        _sk_task_ids
+        _stanok_task_ids
       else
         _arguments '--terminal[Open in terminal]' '--finder[Open in Finder]'
       fi
       ;;
     diff)
       if (( CURRENT == 3 )); then
-        _sk_task_ids
+        _stanok_task_ids
       else
         _arguments '--stat[Show diffstat]'
       fi
@@ -89,7 +89,7 @@ ${groups}${extGroup}
   esac
 }
 
-compdef _sk sk stanok
+compdef _stanok stanok
 `;
 }
 
@@ -100,7 +100,7 @@ function bashScript(): string {
     ...Object.keys(cached),
   ].join(" ");
 
-  return `_sk() {
+  return `_stanok() {
   local cur prev cmds task_cmds
   COMPREPLY=()
   cur="\${COMP_WORDS[COMP_CWORD]}"
@@ -119,7 +119,7 @@ function bashScript(): string {
     for tc in \${task_cmds}; do
       if [[ "\${cmd}" == "\${tc}" ]]; then
         local ids
-        ids="$(sk ls --format=ids 2>/dev/null)"
+        ids="$(stanok ls --format=ids 2>/dev/null)"
         COMPREPLY=( $(compgen -W "\${ids}" -- "\${cur}") )
         return
       fi
@@ -145,8 +145,7 @@ function bashScript(): string {
   esac
 }
 
-complete -F _sk sk
-complete -F _sk stanok
+complete -F _stanok stanok
 `;
 }
 
@@ -155,29 +154,25 @@ function fishScript(): string {
   const cached = readCommandsCache();
 
   lines.push("# Disable file completions by default");
-  lines.push("complete -c sk -f");
   lines.push("complete -c stanok -f");
   lines.push("");
 
   // Subcommands
   for (const [, cmds] of Object.entries(COMMANDS)) {
     for (const [cmd, def] of Object.entries(cmds)) {
-      lines.push(`complete -c sk -n '__fish_use_subcommand' -a '${cmd}' -d '${def.desc}'`);
       lines.push(`complete -c stanok -n '__fish_use_subcommand' -a '${cmd}' -d '${def.desc}'`);
     }
   }
 
   // Plugin commands
   for (const [cmd, def] of Object.entries(cached)) {
-    lines.push(`complete -c sk -n '__fish_use_subcommand' -a '${cmd}' -d '${def.desc}'`);
     lines.push(`complete -c stanok -n '__fish_use_subcommand' -a '${cmd}' -d '${def.desc}'`);
   }
   lines.push("");
 
   // Task ID completions for relevant commands
   const taskIdCondition = TASK_ID_CMDS.map((c) => `__fish_seen_subcommand_from ${c}`).join("; or ");
-  lines.push(`complete -c sk -n '${taskIdCondition}' -a '(sk ls --format=ids 2>/dev/null)'`);
-  lines.push(`complete -c stanok -n '${taskIdCondition}' -a '(sk ls --format=ids 2>/dev/null)'`);
+  lines.push(`complete -c stanok -n '${taskIdCondition}' -a '(stanok ls --format=ids 2>/dev/null)'`);
   lines.push("");
 
   // Subcommand-specific flags
@@ -194,10 +189,8 @@ function fishScript(): string {
 
   for (const [cmd, flag, desc] of flags) {
     if (cmd === "completions") {
-      lines.push(`complete -c sk -n '__fish_seen_subcommand_from completions' -a 'zsh bash fish'`);
       lines.push(`complete -c stanok -n '__fish_seen_subcommand_from completions' -a 'zsh bash fish'`);
     } else {
-      lines.push(`complete -c sk -n '__fish_seen_subcommand_from ${cmd}' -l '${flag}' -d '${desc}'`);
       lines.push(`complete -c stanok -n '__fish_seen_subcommand_from ${cmd}' -l '${flag}' -d '${desc}'`);
     }
   }
