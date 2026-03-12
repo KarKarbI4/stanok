@@ -93,10 +93,8 @@ jobs:
       - name: Publish to npm
         if: steps.check.outputs.has_changesets == 'true'
         run: |
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-          bun run release
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          bun run clean && bun run build
+          npm publish --provenance --access public
 
       - name: Publish unpublished version
         if: steps.check.outputs.has_changesets == 'false'
@@ -106,8 +104,6 @@ jobs:
             echo "stanok@$VERSION already published, skipping"
           else
             echo "stanok@$VERSION not on npm, publishing..."
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-            bun run release
+            bun run clean && bun run build
+            npm publish --provenance --access public
           fi
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
