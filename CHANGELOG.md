@@ -1,5 +1,10 @@
 # stanok
 
+## 0.3.2 — 2026-03-12
+
+Auto-symlink stanok in ~/.stanok/node_modules so plugin imports resolve without manual setup
+
+
 ## 0.3.1 — 2026-03-12
 
 Switch to npm provenance publishing (OIDC, no tokens needed)
