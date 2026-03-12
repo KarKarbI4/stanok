@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync, readFileSync, statSync } from "fs";
-import { basename, join, resolve } from "path";
+import { existsSync, mkdirSync, readFileSync, realpathSync, statSync, symlinkSync, unlinkSync } from "fs";
+import { basename, dirname, join, resolve } from "path";
 import { $ } from "bun";
 import {
   findProjectRoot,
@@ -28,8 +28,24 @@ export function skHome(): string {
   return join(process.env.HOME!, ".stanok");
 }
 
-/** @deprecated No longer needed — plugins are installed via `bun add` in ~/.stanok/ */
-export function ensureWorkbenchLink(): void {}
+/** Ensure ~/.stanok/node_modules/stanok symlinks to the installed stanok package. */
+export function ensureWorkbenchLink(): void {
+  const home = skHome();
+  const nmDir = join(home, "node_modules");
+  const link = join(nmDir, "stanok");
+  // Resolve where the running stanok is installed (this file is inside stanok/dist/core/lib/)
+  const stanokRoot = resolve(dirname(new URL(import.meta.url).pathname), "../../..");
+
+  try {
+    if (existsSync(link)) {
+      const target = realpathSync(link);
+      if (target === realpathSync(stanokRoot)) return; // already correct
+      unlinkSync(link);
+    }
+    mkdirSync(nmDir, { recursive: true });
+    symlinkSync(stanokRoot, link);
+  } catch {}
+}
 function configPath(): string {
   return join(skHome(), "settings.json");
 }
